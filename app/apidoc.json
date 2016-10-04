@@ -1,0 +1,5 @@
+{
+  "name"    : "ApiCarreras",
+  "version" : "0.0.0",
+  "description" : "API privada para la consulta de datos de Carreras y Anotaciones en el Hipódromo de San Isidro"
+}
