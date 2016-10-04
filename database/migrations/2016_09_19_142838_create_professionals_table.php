@@ -17,8 +17,8 @@ class CreateProfessionalsTable extends Migration
             $table->increments('id');
             $table->string('tipo_doc', 6);
             $table->string('num_doc', 40);
-            $table->string('nombre');
-            $table->string('email');
+            $table->string('nombre', 100);
+            $table->string('email', 100);
             $table->boolean('propietario')->default(0);
             $table->boolean('cuidador')->default(0);
             $table->boolean('jockey')->default(0);

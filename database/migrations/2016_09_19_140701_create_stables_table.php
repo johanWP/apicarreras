@@ -15,9 +15,9 @@ class CreateStablesTable extends Migration
     {
         Schema::create('stables', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('tipo_doc')->index();
-            $table->string('num_doc')->index();
-            $table->string('nombre')->index();
+            $table->string('tipo_doc', 6)->index();
+            $table->string('num_doc', 12)->index();
+            $table->string('nombre', 100)->index();
             $table->timestamps();
             $table->softDeletes();
         });
