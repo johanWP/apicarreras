@@ -1,60 +1,6 @@
 
 // ******* A N O T A C I O N E S ********** //
 /**
- * @api {GET} /anotaciones/:idCarrera Listar Anotaciones
- * @apiDescription Retorna el listado de ejemplares ratificados en una carrera particular,
- * en caso de no existir la carrera, se retorna el código HTTP 404.
- * @apiName GetAnotaciones
- * @apiGroup Anotaciones
- * @apiParam {Integer} idCarrera Id de la carrera a consultar
- * @apiParamExample {String} /anotaciones/293
- *  { "id": 20, "tipo_doc_caballeriza": "C.I", "num_doc_caballeriza": "8549655", "fecha_carrera": "2019-12-31",
- * "carrera_id": 45, "kg_programa": 57.0, "kg_reales": 56.9, "cod_hip": "HIPSI", "nombre_premio": "RASPAIL I",
- * "tomo": "1169", "folio": "115", "nombre_ejemplar": "GALICIA GOLD",
- * "tipo_doc_cuidador": "D.U", "num_doc_cuidador": "8291211", "tipo_doc_jockey": "C.I", "num_doc_jockey": "38180140",
- * "tipo_doc_capataz": "D.U", "num_doc_capataz": "14915854", "tipo_doc_peon": "D.U", "num_doc_peon": "8320828",
- * "tipo_doc_sereno": "D.U", "num_doc_sereno": "94626747", "puesto": 0, "orden": "", "partida": "", "tiro": 1},
- * { "id": 21, "tipo_doc_caballeriza": "C.I", "num_doc_caballeriza": "8549655", "fecha_carrera": "2019-12-31",
- * "carrera_id": 45, "kg_programa": 57.0, "kg_reales": 56.7, "cod_hip": "HIPSI", "nombre_premio": "RASPAIL I",
- * "tomo": "1161", "folio": "311", "nombre_ejemplar": "MALVADO SERIAL",
- * "tipo_doc_cuidador": "D.U", "num_doc_cuidador": "8291211", "tipo_doc_jockey": "C.I", "num_doc_jockey": "388391789",
- * "tipo_doc_capataz": "D.U", "num_doc_capataz": "14915854", "tipo_doc_peon": "D.U", "num_doc_peon": "8320828",
- * "tipo_doc_sereno": "D.U", "num_doc_sereno": "94626747", "puesto": 0, "orden": "", "partida": "", "tiro": 1},
- * @apiSuccess {Integer} id Id de la anotación
- * @apiSuccess {String} tipo_doc_caballeriza Tipo de Documento de la caballeriza ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
- * @apiSuccess {String} num_doc_caballeriza Número de documento de la caballeriza
- * @apiSuccess {Date} fecha_carrera Fecha y Hora programada para la carrera
- * @apiSuccess {Integer} carrera_id Id de la carrera de la anotación
- * @apiSuccess {Float} kg_programa Kilogramos de programa
- * @apiSuccess {Float} kg_reales Kilogramos reales
- * @apiSuccess {String} cod_hip Código del hipódromo
- * @apiSuccess {String} nombre_premio Nombre del Premio
- * @apiSuccess {String} tomo Número de tomo del ejemplar
- * @apiSuccess {String} folio Número de folio del ejemplar
- * @apiSuccess {String} nombre_ejemplar Nombre del ejemplar anotado/ratificado
- * @apiSuccess {String} tipo_doc_cuidador Tipo de documento del cuidador
- * @apiSuccess {String} num_doc_cuidador Nombre del cuidador del ejemplar
- * @apiSuccess {String} tipo_doc_jockey  Tipo de documento del jockey
- * @apiSuccess {String} num_doc_jockey Nombre del jockey
- * @apiSuccess {String} tipo_doc_capataz Tipo de documento del capataz
- * @apiSuccess {String} num_doc_capataz Nombre del capataz
- * @apiSuccess {String} tipo_doc_peon Tipo de documento del peon
- * @apiSuccess {String} num_doc_peon Nombre del peon
- * @apiSuccess {String} tipo_doc_sereno Tipo de documento del sereno
- * @apiSuccess {String} num_doc_sereno Nombre del sereno
- * @apiSuccess {Integer} puesto Puesto en que finalizó el ejemplar en la carrera
- * @apiSuccess {String} orden Número con el que va identificado el ejemplar en la carrera
- * @apiSuccess {Integer} partida Número de partidor en la carrera
- * @apiSuccess {Boolean} tiro Define si el ejemplar va de tiro o no
- * @apiError (Error 404) {json} CarreraNoExiste El <code>id</code> de la carrera no existe en la base de datos.
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "CarreraNoExiste"
- *     }
- */
-
-/**
  * @api {POST} /anotaciones/ Guardar una Anotación
  * @apiDescription Recibe los campos necesarios para realizar una anotación,
  * devuelve un error HTTP 400 en caso de no cumplir con los requerimientos.
@@ -90,6 +36,13 @@
  * "tipo_doc_capataz": "D.U", "num_doc_capataz": "14915854", "tipo_doc_peon": "D.U", "num_doc_peon": "8320828",
  * "tipo_doc_sereno": "D.U", "num_doc_sereno": "94626747", "tiro": 1},
  * @apiError (Error 404) {json} CarreraNoExiste El <code>id</code> de la carrera no existe en la base de datos.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "mensaje": "OK"
+ *     }
+
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
@@ -97,7 +50,21 @@
  *     }
  * @apiError (Error 400) {json} DatosIncorrectos Los datos no están completos o tienen el formato incorrecto.
  * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not Found
+ *     HTTP/1.1 404 Bad Request
+ *     {
+ *       "error": "DatosIncorrectos"
+ *     }
+ *
+ * @apiError (Error 400) {json} RegistroDuplicado El ejemplar ya se encuentra registrado para esa carrera.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "RegistroDuplicado"
+ *     }
+ *
+ * @apiError (Error 400) {json} DatosIncorrectos Los datos no están completos o tienen el formato incorrecto.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Bad Request
  *     {
  *       "error": "DatosIncorrectos"
  *     }
@@ -105,7 +72,6 @@
 // ******* F I N   A N O T A C I O N E S ********** //
 
 // ********** C A B A L L E R I Z A S **********//
-
 /**
  * @api {GET} /caballerizas/ Listar Caballerizas
  * @apiDescription Retorna una lista de las caballerizas registradas en el sistema, ordenadas alfabéticamente,
@@ -251,6 +217,20 @@
  * @apiSuccess {Integer} ganadas_hasta Cantidad máxima de carreras ganadas por el ejemplar para participar en la carrera
  * @apiSuccess {Float} kilos Kilos especificados en el programa
  * @apiSuccess {String} tiempo Tiempo registrado para el ganador de la carrera
+ * @apiError (Error 404) {json} FechaEnFormatoIncorrecto Alguno de los parámetros <code>fecha_inicio</code> o <code>fecha_fin</code>
+ * no siguen el formato YYYY-MM-DD.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "FechaEnFormatoIncorrecto"
+ *     }
+ * @apiError (Error 404) {json} FechaInvalida Alguno de los parámetros <code>fecha_inicio</code> o <code>fecha_fin</code>
+ * no siguen el formato YYYY-MM-DD.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "FechaInvalida"
+ *     }
  */
 
 /**
@@ -331,6 +311,62 @@
  *     }
  */
 // ********** F I N   P R O F E S I O N A L E S **********//
+
+// ******* R A T I F I C A C I O N E S ********** //
+/**
+ * @api {GET} /ratificaciones/porCarrera/:idCarrera Listar Ratificaciones por carrera
+ * @apiDescription Retorna el listado de ejemplares ratificados en una carrera particular,
+ * en caso de no existir la carrera, se retorna el código HTTP 404.
+ * @apiName GetRatificaciones
+ * @apiGroup Ratificaciones
+ * @apiParam {Integer} idCarrera Id de la carrera a consultar
+ * @apiParamExample {String} /anotaciones/293
+ *  { "id": 20, "tipo_doc_caballeriza": "C.I", "num_doc_caballeriza": "8549655", "fecha_carrera": "2019-12-31",
+ * "carrera_id": 45, "kg_programa": 57.0, "kg_reales": 56.9, "cod_hip": "HIPSI", "nombre_premio": "RASPAIL I",
+ * "tomo": "1169", "folio": "115", "nombre_ejemplar": "GALICIA GOLD",
+ * "tipo_doc_cuidador": "D.U", "num_doc_cuidador": "8291211", "tipo_doc_jockey": "C.I", "num_doc_jockey": "38180140",
+ * "tipo_doc_capataz": "D.U", "num_doc_capataz": "14915854", "tipo_doc_peon": "D.U", "num_doc_peon": "8320828",
+ * "tipo_doc_sereno": "D.U", "num_doc_sereno": "94626747", "puesto": 0, "orden": "", "partida": "", "tiro": 1},
+ * { "id": 21, "tipo_doc_caballeriza": "C.I", "num_doc_caballeriza": "8549655", "fecha_carrera": "2019-12-31",
+ * "carrera_id": 45, "kg_programa": 57.0, "kg_reales": 56.7, "cod_hip": "HIPSI", "nombre_premio": "RASPAIL I",
+ * "tomo": "1161", "folio": "311", "nombre_ejemplar": "MALVADO SERIAL",
+ * "tipo_doc_cuidador": "D.U", "num_doc_cuidador": "8291211", "tipo_doc_jockey": "C.I", "num_doc_jockey": "388391789",
+ * "tipo_doc_capataz": "D.U", "num_doc_capataz": "14915854", "tipo_doc_peon": "D.U", "num_doc_peon": "8320828",
+ * "tipo_doc_sereno": "D.U", "num_doc_sereno": "94626747", "puesto": 0, "orden": "", "partida": "", "tiro": 1},
+ * @apiSuccess {Integer} id Id de la anotación
+ * @apiSuccess {String} tipo_doc_caballeriza Tipo de Documento de la caballeriza ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
+ * @apiSuccess {String} num_doc_caballeriza Número de documento de la caballeriza
+ * @apiSuccess {Date} fecha_carrera Fecha y Hora programada para la carrera
+ * @apiSuccess {Integer} carrera_id Id de la carrera de la anotación
+ * @apiSuccess {Float} kg_programa Kilogramos de programa
+ * @apiSuccess {Float} kg_reales Kilogramos reales
+ * @apiSuccess {String} cod_hip Código del hipódromo
+ * @apiSuccess {String} nombre_premio Nombre del Premio
+ * @apiSuccess {String} tomo Número de tomo del ejemplar
+ * @apiSuccess {String} folio Número de folio del ejemplar
+ * @apiSuccess {String} nombre_ejemplar Nombre del ejemplar anotado/ratificado
+ * @apiSuccess {String} tipo_doc_cuidador Tipo de documento del cuidador
+ * @apiSuccess {String} num_doc_cuidador Número de documento del cuidador del ejemplar
+ * @apiSuccess {String} nombre_cuidador Nombre del cuidador del ejemplar
+ * @apiSuccess {String} tipo_doc_jockey  Tipo de documento del jockey
+ * @apiSuccess {String} num_doc_jockey Número de documento del jockey
+ * @apiSuccess {String} nombre_doc_jockey Nombre del jockey
+ * @apiSuccess {String} puesto Puesto en que finalizó el ejemplar en la carrera o 'RV' si se retiró
+ * @apiSuccess {String} orden Número con el que va identificado el ejemplar en la carrera
+ * @apiSuccess {Integer} partida Número de partidor en la carrera
+ * @apiSuccess {Boolean} tiro Define si el ejemplar va de tiro o no
+ * @apiSuccess {Boolean} diferencia Describe la distancia con respecto al competidor más cercano
+ * @apiSuccess {Boolean} diferencia_acumulada Describe la distancia con respecto al ganador de la carrera
+ * @apiSuccess {Boolean} monto_premio Monto ganado por el ejemplar
+ * @apiError (Error 404) {json} CarreraNoExiste El <code>id</code> de la carrera no existe en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "CarreraNoExiste"
+ *     }
+ */
+
+// **********  F I N    R A T I F I C A C I O N E S  **********//
 
 // **********  S A N C I O N E S  **********//
 /**

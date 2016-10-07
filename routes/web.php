@@ -16,8 +16,15 @@ Route::get('/', function () {
 });
 // ******** WS Caballerizas ****************
 Route::get('/caballerizas/', 'StableController@index');
-Route::get('/caballerizas/{id}', 'StableController@show');
+Route::get('/caballerizas/{id}', 'StableController@show')->middleware('apiCarreras');
 
 // ********** WS de Anotaciones *************
-Route::get('/anotaciones/{id}', 'NoteController@show');
+Route::get('/anotaciones/{idCarrera}', 'NoteController@anotaciones');
+
+// ********** WS de Carreras  ***************
+Route::get('/carreras/', 'RaceController@index');
+Route::get('/carreras/porFecha/{inicio}/{fin}', 'RaceController@CarrerasPorFecha');
+
+// ********** WS de Ratificaciones para Palermo *************
+Route::get('/ratificaciones/porCarrera/{idCarrera}', 'NoteController@ratificaciones');
 

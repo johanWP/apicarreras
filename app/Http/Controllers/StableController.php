@@ -46,7 +46,6 @@ class StableController extends Controller
     public function show($id)
     {
 
-        $result = New Collection();
         $caballeriza = Stable::find($id);
         if ( ! $caballeriza)
         {
@@ -55,13 +54,12 @@ class StableController extends Controller
             ], 404);
         } else
         {
-            $result = [
+            return  $result = [
                 'id'        =>  $caballeriza->id,
                 'tipo_doc'  =>  $caballeriza->tipo_doc,
                 'num_doc'   =>  $caballeriza->num_doc,
                 'nombre'    =>  $caballeriza->nombre,
             ];
         }
-        return $result;
     }
 }

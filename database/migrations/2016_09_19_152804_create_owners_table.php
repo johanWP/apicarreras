@@ -17,11 +17,6 @@ class CreateOwnersTable extends Migration
             $table->increments('id');
             $table->integer('stable_id')->unsigned();
             $table->integer('professional_id')->unsigned();
-
-//            $table->char('tipo_doc_caballeriza', 4);
-//            $table->string('num_doc_caballeriza', 20);
-//            $table->char('tipo_doc_propietario', 4);
-//            $table->string('num_doc_propietario', 20);
             $table->timestamps();
             $table->softDeletes();
         });

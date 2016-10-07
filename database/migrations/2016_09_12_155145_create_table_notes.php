@@ -39,12 +39,15 @@ class CreateTableNotes extends Migration
             $table->string('num_doc_sereno', 12)->nullable();
             $table->decimal('kg_programa', 6, 2)->nullable();
             $table->decimal('kg_reales', 6, 2)->nullable();
-            $table->integer('puesto')->nullable();
+            $table->string('puesto', 6)->default('0')->nullable();
             $table->string('orden', 4)->nullable();
             $table->integer('partida')->nullable();
             $table->string('tratamiento', 100)->nullable();
             $table->string('observacion', 200)->nullable();
             $table->char('certificado_starter', 4)->nullable();
+            $table->string('diferencia', 10)->nullable();
+            $table->string('diferencia_acumulada', 10)->nullable();
+            $table->decimal('monto_premio', 12, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
