@@ -114,7 +114,7 @@
 // **********  C A B A L L O S **********//
 /**
  * @api {GET} /caballos/:tomo/:folio Detalle de caballo
- * @apiDescription Retorna el detalle de un caballo identificada por tomo y folio,
+ * @apiDescription Retorna el detalle de un caballo identificado por tomo y folio,
  * si no existe el ejemplar se retorna un error HTTP 404.
  * @apiName GetCaballo
  * @apiGroup Caballo
@@ -142,6 +142,39 @@
  *     HTTP/1.1 404 Not Found
  *     {
  *       "error": "CaballoNoExiste"
+ *     }
+ */
+
+/**
+ * @api {GET} /caballos/PorNombre/:nombre Consulta por nombre
+ * @apiDescription Retorna el detalle de los ejemplares que tienen un nombre coincidente con el parámetro enviado,
+ * si no existe ninguno se devuelve un mensaje.
+ * @apiName GetCaballo
+ * @apiGroup Caballo
+ * @apiParam  {String} tomo Tomo que identifica al ejemplar
+ * @apiParam  {String} folio Folio que identifica al ejemplar
+ * @apiParamExample {String} /caballos/1103/871/
+ * { "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
+ * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
+ * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
+ * }
+ * @apiSuccess {String} id Id del caballo
+ * @apiSuccess {String} tomo Tomo que identifica al ejemplar
+ * @apiSuccess {String} folio Folio que identifica al ejemplar
+ * @apiSuccess {String} nombre Nombre del ejemplar
+ * @apiSuccess {Date} fecha_nacimiento Fecha de nacimiento del ejemplar
+ * @apiSuccess {Date} fecha_muerte Fecha de muerte del ejemplar
+ * @apiSuccess {Integer} ganadas_comunes Cantidad de carreras comunes ganadas
+ * @apiSuccess {Integer} ganadas_clasicos Cantidad de clásicos ganadas
+ * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
+ * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
+ * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
+ * @apiError (Error 404) {json} CaballoNoExiste La combinación de <code>tomo</code> y <code>folio</code> del caballo no existe
+ * en la base de datos.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "caballos": ""
  *     }
  */
 
