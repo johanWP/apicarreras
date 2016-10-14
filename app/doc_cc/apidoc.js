@@ -113,19 +113,19 @@
 
 // **********  C A B A L L O S **********//
 /**
- * @api {GET} /caballos/:tomo/:folio Detalle de caballo
- * @apiDescription Retorna el detalle de un caballo identificado por tomo y folio,
+ * @api {GET} /ejemplares/:tomo/:folio Detalle de ejemplar
+ * @apiDescription Retorna el detalle de un ejemplar identificado por tomo y folio,
  * si no existe el ejemplar se retorna un error HTTP 404.
- * @apiName GetCaballo
- * @apiGroup Caballo
+ * @apiName GetEjemplarPorTomo
+ * @apiGroup Ejemplares
  * @apiParam  {String} tomo Tomo que identifica al ejemplar
  * @apiParam  {String} folio Folio que identifica al ejemplar
- * @apiParamExample {String} /caballos/1103/871/
+ * @apiParamExample {String} /ejemplares/1103/871/
  * { "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
  * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
  * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
  * }
- * @apiSuccess {String} id Id del caballo
+ * @apiSuccess {String} id Id del ejemplar
  * @apiSuccess {String} tomo Tomo que identifica al ejemplar
  * @apiSuccess {String} folio Folio que identifica al ejemplar
  * @apiSuccess {String} nombre Nombre del ejemplar
@@ -136,29 +136,28 @@
  * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
  * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
  * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
- * @apiError (Error 404) {json} CaballoNoExiste La combinación de <code>tomo</code> y <code>folio</code> del caballo no existe
+ * @apiError (Error 404) {json} EjemplarNoExiste La combinación de <code>tomo</code> y <code>folio</code> del ejemplar no existe
  * en la base de datos.
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
- *       "error": "CaballoNoExiste"
+ *       "error": "EjemplarNoExiste"
  *     }
  */
-
 /**
- * @api {GET} /caballos/PorNombre/:nombre Consulta por nombre
+ * @api {GET} /ejemplares/PorNombre/:nombre Consulta por nombre
  * @apiDescription Retorna el detalle de los ejemplares que tienen un nombre coincidente con el parámetro enviado,
- * si no existe ninguno se devuelve un mensaje.
- * @apiName GetCaballo
- * @apiGroup Caballo
+ * si no existe ninguno se devuelve un error HTTP 404.
+ * @apiName GetEjemplarPorNombre
+ * @apiGroup Ejemplares
  * @apiParam  {String} tomo Tomo que identifica al ejemplar
  * @apiParam  {String} folio Folio que identifica al ejemplar
- * @apiParamExample {String} /caballos/1103/871/
+ * @apiParamExample {String} /ejemplares/PASSIO
  * { "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
  * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
  * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
  * }
- * @apiSuccess {String} id Id del caballo
+ * @apiSuccess {String} id Id del ejemplar
  * @apiSuccess {String} tomo Tomo que identifica al ejemplar
  * @apiSuccess {String} folio Folio que identifica al ejemplar
  * @apiSuccess {String} nombre Nombre del ejemplar
@@ -169,12 +168,19 @@
  * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
  * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
  * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
- * @apiError (Error 404) {json} CaballoNoExiste La combinación de <code>tomo</code> y <code>folio</code> del caballo no existe
- * en la base de datos.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "caballos": ""
+ *       "ejemplares": "[{ "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
+ * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
+ * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
+ * }]"
+ *     }
+ * @apiError (Error 404) {json} EjemplarNoExiste No hay ejemplares con ese nombre en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "EjemplarNoExiste"
  *     }
  */
 
@@ -182,6 +188,7 @@
 
 
 // ********** C A R R E R A S **********//
+
 /**
  * @api {GET} /carreras/:idCarrera Detalle de carrera
  * @apiDescription Retorna el detalle de una carerra específica, en caso de no existir el id de la carrera, se retorna un error HTTP 404.
@@ -224,13 +231,8 @@
  * @apiGroup Carreras
  * @apiParam  {Date} fecha_inicio Fecha de inicio de la consulta en formato YYYY-MM-DD, inclusive.
  * @apiParam  {Date} fecha_fin Fecha de fin de la consulta en formato YYYY-MM-DD, inclusive.
- * @apiParamExample {Date} /carreras/porFecha/2016-09-13/2016-09-14
- * { "id": 1, "fecha": "2016-09-13 10:00:00", "numero": "1", "nombre": "GRAN MURALLA I", "reunion": "28", "tipo": "M",
-"pista": "CDI", "distancia": 1200, "monto_premio": "23760.00", "edad_desde": 3, "edad_hasta": 3, "sexo": "H",
-"ganadas_desde": 0, "ganadas_hasta": 0, "kilos": "56.00", "tiempo": "03:36:884" },
- {"id": 2, "fecha": "2016-09-14 10:00:00", "numero": "2", "nombre": "AL VINO VINO 1994", "reunion": "28", "tipo": "M",
- "pista": "RCN", "distancia": 1200, "monto_premio": "19152.00", "edad_desde": 5, "edad_hasta": 6, "sexo": "H",
- "ganadas_desde": 1, "ganadas_hasta": 5, "kilos": "57.00",  "tiempo": "05:46:224"  }
+ * @apiParamExample {Date} /carreras/porFecha/2016-09-02/2016-09-14
+ * {"id":1,"fecha_carrera":"2016-09-02 14:00:00","tipo_doc_caballeriza":"MAQ","num_doc_caballeriza":"55502","nombre_caballeriza":"BOCA PAILA (AZL)","carrera_id":1,"kg_programa":"57.00","kg_reales":"57.00","cod_hip":"HIPSI","nombre_premio":"QUE FELICIDAD 2007","tomo":"1157","folio":"513","nombre_ejemplar":"VUTAN","tipo_doc_cuidador":"D.U","num_doc_cuidador":"94626774","tipo_doc_jockey":"D.U","num_doc_jockey":"32591406","puesto":"01","orden":"11","diferencia":"","diferencia_acumulada":"1\/2pzo","monto_premio":"29484.00"}
  * @apiSuccess {Object} Carreras Objeto JSON con los campos  'fecha', 'numero', 'nombre', 'reunion',
  'tipo', 'pista', 'distancia', 'monto_premio', 'edad_desde', 'edad_hasta', 'sexo',
  'ganadas_desde', 'ganadas_hasta', 'kilos', 'tiempo'
@@ -448,14 +450,14 @@
  */
 
 /**
- * @api {GET} /sanciones/caballos/:tomo/:folio Sanciones de ejemplares
- * @apiDescription Retorna una lista de las sanciones de caballo
+ * @api {GET} /sanciones/ejemplars/:tomo/:folio Sanciones de ejemplares
+ * @apiDescription Retorna una lista de las sanciones de ejemplar
  * según el tipo y número de documento, en caso de no existir sanciones, se retorna un objeto JSON vacío.
  * @apiName GetSancionesCaballos
  * @apiGroup Sanciones
- * @apiParam  {String} tomo Tipo de documento del caballo  ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
- * @apiParam  {String} folio Número de documento del caballo
- * @apiParamExample {String} /sanciones/caballos/4598/254
+ * @apiParam  {String} tomo Tipo de documento del ejemplar  ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
+ * @apiParam  {String} folio Número de documento del ejemplar
+ * @apiParamExample {String} /sanciones/ejemplars/4598/254
  * { "id": 1, "fecha_desde": "2015-11-13","fecha_hasta": "2015-11-21", "tomo": "4598", "folio": "254",
  * "descripcion": "POR RECLAMAR INJUSTIFICADAMENTE." },
  * { "id": 2, "fecha_desde": "2016-09-20","fecha_hasta": "2016-09-30", "tomo": "4598", "folio": "254",

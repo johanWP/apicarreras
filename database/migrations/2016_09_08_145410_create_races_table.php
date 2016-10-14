@@ -16,7 +16,6 @@ class CreateRacesTable extends Migration
         Schema::create('races', function (Blueprint $table) {
             $table->increments('id');
             $table->dateTime('fecha')->index();
-//            $table->time('hora')->nullable();
             $table->string('numero', 3)->nullable();
             $table->string('nombre', 20)->nullable();
             $table->char('reunion', 3)->nullable();
@@ -32,6 +31,7 @@ class CreateRacesTable extends Migration
             $table->integer('ganadas_hasta')->unsigned()->nullable();
             $table->decimal('kilos', 6, 2)->nullable();
             $table->char('tiempo', 10)->nullable();
+            $table->char('codigo_hipodromo', 3)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
