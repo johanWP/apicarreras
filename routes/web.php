@@ -24,6 +24,7 @@ Route::get('/anotaciones/{idCarrera}', 'NoteController@anotaciones');
 // ********** WS de Carreras  ***************
 Route::get('/carreras/', 'RaceController@index');
 Route::get('/carreras/porFecha/{inicio}/{fin}', 'RaceController@CarrerasPorFecha');
+Route::get('/carreras/{id}', 'RaceController@show');
 
 // ********** WS de Ratificaciones para Palermo *************
 Route::get('/ratificaciones/porCarrera/{idCarrera}', 'NoteController@ratificaciones');

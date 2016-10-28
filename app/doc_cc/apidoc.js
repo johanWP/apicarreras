@@ -1,5 +1,5 @@
 
-// ******* A N O T A C I O N E S ********** //
+// ******* A N O T A C I O N E S ( tabla inter_notes para CC ) ********** //
 /**
  * @api {POST} /anotaciones/ Guardar una Anotación
  * @apiDescription Recibe los campos necesarios para realizar una anotación,

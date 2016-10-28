@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Race;
+use Spatie\Activitylog;
 
 class RaceController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -18,11 +18,15 @@ class RaceController extends Controller
      */
     public function index()
     {
-        $races = Race::where('fecha', '>', Carbon::today())
-            ->where('fecha', '<', Carbon::tomorrow())
+        $data = array();
+        $carreras = Race::where('fecha', '>=', Carbon::today())
+            ->where('fecha', '<=', Carbon::tomorrow())
             ->get();
-        activity()->log('Look, I logged something');
-        return $races;
+        activity()
+            ->withProperties(['IP_add' => request()->ip()])
+            ->log('Acceso a Index de carreras');
+        $data = $this->armarArreglo($carreras);
+        return $carreras;
     }
 
     /**
@@ -33,7 +37,41 @@ class RaceController extends Controller
      */
     public function show($id)
     {
-        return Race::findOrFail($id);
+        $data = array();
+        $carrera = Race::find($id);
+        if ( ! $carrera)
+        {
+            return response()->json([
+                'message' => 'CarreraNoExiste',
+            ], 404);
+        } else
+        {
+            activity()
+                ->performedOn($carrera)
+                ->withProperties(['IP_add' => request()->ip()])
+                ->log('Acceso a la carrera: '. $carrera->nombre);
+
+            $data[] = [
+                'id'        =>  $carrera->id,
+                'fecha'     =>  $carrera->fecha->toDateTimeString(),
+                'numero'    =>  $carrera->numero,
+                'nombre'    =>  $carrera->nombre,
+                'reunion'   =>  $carrera->reunion,
+                'tipo'      =>  $carrera->tipo,
+                'pista'     =>  $carrera->pista,
+                'estado_pista'     =>  $carrera->estado_pista,
+                'distancia' =>  $carrera->distancia,
+                'monto_premio'  =>  $carrera->monto_premio,
+                'edad_desde'    =>  $carrera->edad_desde,
+                'edad_hasta'    =>  $carrera->edad_hasta,
+                'sexo'      =>  $carrera->sexo,
+                'ganadas_desde' =>  $carrera->ganadas_desde,
+                'ganadas_hasta' =>  $carrera->ganadas_hasta,
+                'kilos'     =>  $carrera->kilos,
+                'tiempo'    =>  $carrera->tiempo
+                ];
+            return $data;
+        }
     }
 
     public function CarrerasPorFecha($inicio, $fin)
@@ -56,10 +94,18 @@ class RaceController extends Controller
 
         $carreras = Race::where('fecha', '>', $inicio. '00:00:00')
             ->where('fecha', '<', $fin.' 23:59:59')->get();
-//dd($carreras);
+
+        activity()
+            ->withProperties(['IP_add' => request()->ip()])
+            ->log('Acceso a las carreras entre: '. $inicio . ' y '. $fin);
+        $data = $this->armarArreglo($carreras);
+        return $data;
+    }
+
+    private function armarArreglo($carreras)
+    {
         foreach ($carreras as $carrera)
         {
-//            dd($carrera->fecha->toDateTimeString());
             $data[] = [
                 'id'        =>  $carrera->id,
                 'fecha'     =>  $carrera->fecha->toDateTimeString(),
@@ -74,8 +120,8 @@ class RaceController extends Controller
                 'edad_desde'    =>  $carrera->edad_desde,
                 'edad_hasta'    =>  $carrera->edad_hasta,
                 'sexo'      =>  $carrera->sexo,
-                'ganadas_desde'  =>  $carrera->ganadas_desde,
-                'ganadas_hasta'  =>  $carrera->ganadas_hasta,
+                'ganadas_desde' =>  $carrera->ganadas_desde,
+                'ganadas_hasta' =>  $carrera->ganadas_hasta,
                 'kilos'     =>  $carrera->kilos,
                 'tiempo'    =>  $carrera->tiempo,
             ];
