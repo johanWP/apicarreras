@@ -35,12 +35,14 @@ class RaceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function porId($id)
     {
-        $data = array();
         $carrera = Race::find($id);
         if ( ! $carrera)
         {
+            activity()
+                ->withProperties(['IP_add' => request()->ip()])
+                ->log('Error: Acceso a carrera inexistente: '. $id);
             return response()->json([
                 'message' => 'CarreraNoExiste',
             ], 404);
@@ -51,7 +53,7 @@ class RaceController extends Controller
                 ->withProperties(['IP_add' => request()->ip()])
                 ->log('Acceso a la carrera: '. $carrera->nombre);
 
-            $data[] = [
+            $data = [
                 'id'        =>  $carrera->id,
                 'fecha'     =>  $carrera->fecha->toDateTimeString(),
                 'numero'    =>  $carrera->numero,
@@ -74,11 +76,15 @@ class RaceController extends Controller
         }
     }
 
-    public function CarrerasPorFecha($inicio, $fin)
+    public function porFecha($inicio, $fin)
     {
         $data = array();
         if ( (substr_count($inicio, '-') != 2) || (substr_count($fin, '-') != 2) )
         {
+            activity()
+                ->withProperties(['IP_add' => request()->ip()])
+                ->log('Error: Acceso a carrera con formato de fecha incorrecto. Inicio: '. $inicio . ', Fin: '. $fin);
+
             return response()->json([
                 'message' => 'FechaEnFormatoIncorrecto',
             ], 400);
@@ -87,6 +93,9 @@ class RaceController extends Controller
         $arrFin = explode('-',$fin);
         if((!checkdate($arrInicio[1], $arrInicio[2], $arrInicio[0])) || (! checkdate($arrFin[1], $arrFin[2], $arrFin[0])))
         {
+            activity()
+                ->withProperties(['IP_add' => request()->ip()])
+                ->log('Error: Acceso a carrera con fecha no válida. Inicio: '. $inicio . ', Fin: '. $fin);
             return response()->json([
                 'message' => 'FechaInvalida',
             ], 400);
@@ -96,6 +105,7 @@ class RaceController extends Controller
             ->where('fecha', '<', $fin.' 23:59:59')->get();
 
         activity()
+            ->performedOn($carreras)
             ->withProperties(['IP_add' => request()->ip()])
             ->log('Acceso a las carreras entre: '. $inicio . ' y '. $fin);
         $data = $this->armarArreglo($carreras);

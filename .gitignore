@@ -1,5 +1,7 @@
 /node_modules
 /public/storage
+/public/doc_cc
+/public/doc_palermo
 /vendor
 /.idea
 Homestead.json
