@@ -44,4 +44,33 @@ class HorsesTableTest extends TestCase
             $this->assertTrue(Schema::hasColumn($this->tabla, $this->columns[$i]));
         }
     }
+    
+    public function testPorTomoFolioNoExiste()
+    {
+        $ranTomo = rand(1, 100); $ranFolio = rand(1, 100);
+        $this->get('/ejemplares/porTomoFolio/'. $ranTomo .'/'. $ranFolio)
+            ->see('EjemplarNoExiste');
+    }
+
+    public function testPorNombreNoExiste()
+    {
+        $ranNombre = rand(100000, 999999);
+        $this->get('/ejemplares/porNombre/'. $ranNombre)
+            ->see('EjemplarNoExiste');
+//            ->assertResponseStatus(404);
+    }
+
+    public function testPorTomoFolio()
+    {
+        $tomo = '1103'; $folio = '624';
+        $this->visit('/ejemplares/porTomoFolio/'. $tomo .'/'. $folio)
+            ->seeJson(["nombre" => "NEGRA MORA"]);
+    }
+
+    public function testPorNombre()
+    {
+        $nombre = 'VINO';
+        $this->visit('/ejemplares/porNombre/'. $nombre)
+            ->assertResponseOk();
+    }
 }

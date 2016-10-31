@@ -26,7 +26,7 @@ class RaceController extends Controller
             ->withProperties(['IP_add' => request()->ip()])
             ->log('Acceso a Index de carreras');
         $data = $this->armarArreglo($carreras);
-        return $carreras;
+        return $data;
     }
 
     /**
@@ -105,7 +105,6 @@ class RaceController extends Controller
             ->where('fecha', '<', $fin.' 23:59:59')->get();
 
         activity()
-            ->performedOn($carreras)
             ->withProperties(['IP_add' => request()->ip()])
             ->log('Acceso a las carreras entre: '. $inicio . ' y '. $fin);
         $data = $this->armarArreglo($carreras);
@@ -114,6 +113,7 @@ class RaceController extends Controller
 
     private function armarArreglo($carreras)
     {
+        $data = array();
         foreach ($carreras as $carrera)
         {
             $data[] = [

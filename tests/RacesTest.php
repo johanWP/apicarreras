@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Carbon\Carbon;
 
 /**
  * Class RacesTableTest
@@ -46,5 +47,37 @@ class RacesTableTest extends TestCase
         {
             $this->assertTrue(Schema::hasColumn($this->tabla, $this->columns[$i]));
         }
+    }
+
+    public function testCarrerasIndex()
+    {
+        $this->visit('/carreras/')
+            ->assertResponseOk();
+    }
+
+    public function testPorIdNoExiste()
+    {
+        $this->get('/carreras/porId/fakeID')
+            ->seeJson(["message" => "CarreraNoExiste"]);
+    }
+
+    public function testPorFechaInvalida()
+    {
+        $this->get('/carreras/porFecha/2016-09-01/2016-09-00')
+            ->seeJson(["message" => "FechaInvalida"]);
+    }
+    
+    public function testPorFechaFormatoIncorrecto()
+    {
+        $this->get('/carreras/porFecha/2016-09-01/2016-09--10')
+            ->seeJson(["message" => "FechaEnFormatoIncorrecto"]);
+    }
+
+    public function testPorFecha()
+    {
+        $hoy = Carbon::today()->toDateString();
+        $ayer = Carbon::yesterday()->toDateString();
+        $this->get('/carreras/porFecha/'. $ayer .'/'. $hoy)
+            ->assertResponseOk();
     }
 }

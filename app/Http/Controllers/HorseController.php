@@ -70,7 +70,6 @@ class HorseController extends Controller
         } else
         {
             activity()
-                ->performedOn($caballos)
                 ->withProperties(['IP_add' => request()->ip()])
                 ->log('Acceso a ejemplares con nombre: '. $nombre);
 
