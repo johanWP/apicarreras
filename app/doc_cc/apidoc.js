@@ -108,59 +108,24 @@
  *       "error": "CaballerizaNoExiste"
  *     }
  */
+
 // ********** F I N   C A B A L L E R I Z A S **********//
 
 
 // **********  C A B A L L O S **********//
 /**
- * @api {GET} /ejemplares/:tomo/:folio Detalle de ejemplar
+ * @api {GET} /ejemplares/porTomoFolio/:tomo/:folio Consulta por Tomo y Folio
  * @apiDescription Retorna el detalle de un ejemplar identificado por tomo y folio,
  * si no existe el ejemplar se retorna un error HTTP 404.
  * @apiName GetEjemplarPorTomo
  * @apiGroup Ejemplares
  * @apiParam  {String} tomo Tomo que identifica al ejemplar
  * @apiParam  {String} folio Folio que identifica al ejemplar
- * @apiParamExample {String} /ejemplares/1103/871/
- * { "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
- * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
- * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
- * }
- * @apiSuccess {String} id Id del ejemplar
+ * @apiSuccess {Integer} id Id del ejemplar
  * @apiSuccess {String} tomo Tomo que identifica al ejemplar
  * @apiSuccess {String} folio Folio que identifica al ejemplar
  * @apiSuccess {String} nombre Nombre del ejemplar
- * @apiSuccess {Date} fecha_nacimiento Fecha de nacimiento del ejemplar
- * @apiSuccess {Date} fecha_muerte Fecha de muerte del ejemplar
- * @apiSuccess {Integer} ganadas_comunes Cantidad de carreras comunes ganadas
- * @apiSuccess {Integer} ganadas_clasicos Cantidad de clásicos ganadas
- * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
- * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
- * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
- * @apiError (Error 404) {json} EjemplarNoExiste La combinación de <code>tomo</code> y <code>folio</code> del ejemplar no existe
- * en la base de datos.
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *       "error": "EjemplarNoExiste"
- *     }
- */
-/**
- * @api {GET} /ejemplares/PorNombre/:nombre Consulta por nombre
- * @apiDescription Retorna el detalle de los ejemplares que tienen un nombre coincidente con el parámetro enviado,
- * si no existe ninguno se devuelve un error HTTP 404.
- * @apiName GetEjemplarPorNombre
- * @apiGroup Ejemplares
- * @apiParam  {String} tomo Tomo que identifica al ejemplar
- * @apiParam  {String} folio Folio que identifica al ejemplar
- * @apiParamExample {String} /ejemplares/PASSIO
- * { "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
- * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
- * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
- * }
- * @apiSuccess {String} id Id del ejemplar
- * @apiSuccess {String} tomo Tomo que identifica al ejemplar
- * @apiSuccess {String} folio Folio que identifica al ejemplar
- * @apiSuccess {String} nombre Nombre del ejemplar
+ * @apiSuccess {String} sexo Sexo del ejemplar (H, M)
  * @apiSuccess {Date} fecha_nacimiento Fecha de nacimiento del ejemplar
  * @apiSuccess {Date} fecha_muerte Fecha de muerte del ejemplar
  * @apiSuccess {Integer} ganadas_comunes Cantidad de carreras comunes ganadas
@@ -170,17 +135,84 @@
  * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
+ {
+   "id": 10029,
+   "tomo": "1041",
+   "folio": "369",
+   "nombre": "NEGRA ALEGRE",
+   "sexo": "H",
+   "fecha_nacimiento": "1995-11-19",
+   "fecha_muerte": "N/A",
+   "ganadas_comunes": 0,
+   "ganadas_clasicos": 0,
+   "ganadas_grupo": null,
+   "ganadas_internacionales": 0,
+   "ganadas_series": 0
+ }
+ * @apiError (Error 404) {json} EjemplarNoExiste La combinación de <code>tomo</code> y <code>folio</code> del ejemplar no existe
+ * en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
  *     {
- *       "ejemplares": "[{ "id": 14318, "tomo": "1103", "folio": "871", "nombre": "LID PASSIONERO",
- * "fecha_nacimiento": "2004-12-30", "fecha_muerte": "2005-01-15",
- * "ganadas_comunes": 5, "ganadas_clasicos": 0, "ganadas_grupo": 1, "ganadas_internacionales": 1, "ganadas_series": 1
- * }]"
+ *       "message": "EjemplarNoExiste"
  *     }
+ */
+/**
+ * @api {GET} /ejemplares/PorNombre/:nombre Consulta por nombre
+ * @apiDescription Retorna el un arreglo de objetos con el detalle de los ejemplares que tienen un nombre
+ * coincidente con el parámetro enviado, si no existe ninguno se devuelve un error HTTP 404.
+ * @apiName GetEjemplarPorNombre
+ * @apiGroup Ejemplares
+ * @apiParam  /ejemplares/PorNombre/negr nombre Nombre o parte del nombre del ejemplar
+ * @apiSuccess {Integer} id Id del ejemplar
+ * @apiSuccess {String} tomo Tomo que identifica al ejemplar
+ * @apiSuccess {String} folio Folio que identifica al ejemplar
+ * @apiSuccess {String} nombre Nombre del ejemplar
+ * @apiSuccess {String} sexo Nombre del ejemplar (H, M)
+ * @apiSuccess {Date} fecha_nacimiento Fecha de nacimiento del ejemplar
+ * @apiSuccess {Date} fecha_muerte Fecha de muerte del ejemplar
+ * @apiSuccess {Integer} ganadas_comunes Cantidad de carreras comunes ganadas
+ * @apiSuccess {Integer} ganadas_clasicos Cantidad de clásicos ganadas
+ * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
+ * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
+ * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
+ * @apiSuccessExample {json} /ejemplares/PorNombre/negr
+ *     HTTP/1.1 200 OK
+ [
+     {
+       "id": 10029,
+       "tomo": "1041",
+       "folio": "369",
+       "nombre": "NEGRA ALEGRE",
+       "sexo": "H",
+       "fecha_nacimiento": "1995-11-19",
+       "fecha_muerte": "N/A",
+       "ganadas_comunes": 0,
+       "ganadas_clasicos": 0,
+       "ganadas_grupo": null,
+       "ganadas_internacionales": 0,
+       "ganadas_series": 0
+     },
+     {
+       "id": 57586,
+       "tomo": "803",
+       "folio": "80",
+       "nombre": "NEGRA ALTIVA",
+       "sexo": "H",
+       "fecha_nacimiento": "1986-10-17",
+       "fecha_muerte": "N/A",
+       "ganadas_comunes": 0,
+       "ganadas_clasicos": 0,
+       "ganadas_grupo": null,
+       "ganadas_internacionales": 0,
+       "ganadas_series": 0
+     }
+ ]
  * @apiError (Error 404) {json} EjemplarNoExiste No hay ejemplares con ese nombre en la base de datos.
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
- *       "error": "EjemplarNoExiste"
+ *       "message": "EjemplarNoExiste"
  *     }
  */
 
@@ -190,18 +222,14 @@
 // ********** C A R R E R A S **********//
 
 /**
- * @api {GET} /carreras/:idCarrera Detalle de carrera
+ * @api {GET} /carreras/porID/:idCarrera Consulta por Id
  * @apiDescription Retorna el detalle de una carerra específica, en caso de no existir el id de la carrera, se retorna un error HTTP 404.
  * @apiName GetCarreras
  * @apiGroup Carreras
  * @apiParam  {Integer} idCarrera Id que identifica a la carrera.
- * @apiParamExample {Integer} /carreras/1
- * {"id": 2, "fecha": "2016-09-13 10:00:00", "numero": "2", "nombre": "AL VINO VINO 1994", "reunion": "28", "tipo": "M",
- "pista": "RCN", "distancia": 1200, "monto_premio": "19152.00", "edad_desde": 5, "edad_hasta": 6, "sexo": "H",
- "ganadas_desde": 1, "ganadas_hasta": 5, "kilos": "57.00", "tiempo": "05:21:118"  }
- * @apiSuccess {String} id Id de la Carrera
+ * @apiSuccess {Integer} id Id de la Carrera
  * @apiSuccess {DateTime} fecha Fecha y hora de la carrera
- * @apiSuccess {Integer} numero Número de la carrera
+ * @apiSuccess {String} numero Número de la carrera
  * @apiSuccess {String} nombre Nombre de la carrera
  * @apiSuccess {String} reunion Número de reunión a la que pertenece la carrera
  * @apiSuccess {String} tipo Tipo de carrera ['M', 'MJ', 'MA', 'C', 'MP', 'H', 'C2', 'C3', 'E']
@@ -215,27 +243,43 @@
  * @apiSuccess {Integer} ganadas_hasta Cantidad máxima de carreras ganadas por el ejemplar para participar en la carrera
  * @apiSuccess {Float} kilos Kilos especificados en el programa
  * @apiSuccess {String} tiempo Tiempo registrado para el ganador de la carrera
+ * @apiSuccessExample {json} /carreras/16
+ * HTTP/1.1 200 OK
+{
+   "id": 16,
+   "fecha": "2016-09-07 14:00:00",
+   "numero": "1",
+   "nombre": "GATITA RYE 2014(ALT)",
+   "reunion": "83",
+   "tipo": "MA",
+   "pista": "RCN",
+   "estado_pista": "P",
+   "distancia": 1100,
+   "monto_premio": "16632.00",
+   "edad_desde": 4,
+   "edad_hasta": 5,
+   "sexo": "T",
+   "ganadas_desde": 1,
+   "ganadas_hasta": 1,
+   "kilos": "57.00",
+   "tiempo": "105371"
+ }
  * @apiError (Error 404) {json} CarreraNoExiste El <code>id</code> de la carrera no existe en la base de datos.
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
- *       "error": "CarreraNoExiste"
+ *       "message": "CarreraNoExiste"
  *     }
  */
 
 /**
- * @api {GET} /carreras/porFecha/:fecha_inicio/:fecha_fin Listar Carreras por fecha
- * @apiDescription Retorna el listado de carreras entre dos fechas, ambas inclusive,
+ * @api {GET} /carreras/porFecha/:fecha_inicio/:fecha_fin Consulta por fecha
+ * @apiDescription Retorna un arreglo de objetos JSON con detalle de las carreras entre dos fechas, ambas inclusive,
  * en caso de no existir carreras, se retorna un objeto JSON vacío.
  * @apiName GetCarrerasPorFecha
  * @apiGroup Carreras
- * @apiParam  {Date} fecha_inicio Fecha de inicio de la consulta en formato YYYY-MM-DD, inclusive.
- * @apiParam  {Date} fecha_fin Fecha de fin de la consulta en formato YYYY-MM-DD, inclusive.
- * @apiParamExample {Date} /carreras/porFecha/2016-09-02/2016-09-14
- * {"id":1,"fecha_carrera":"2016-09-02 14:00:00","tipo_doc_caballeriza":"MAQ","num_doc_caballeriza":"55502","nombre_caballeriza":"BOCA PAILA (AZL)","carrera_id":1,"kg_programa":"57.00","kg_reales":"57.00","cod_hip":"HIPSI","nombre_premio":"QUE FELICIDAD 2007","tomo":"1157","folio":"513","nombre_ejemplar":"VUTAN","tipo_doc_cuidador":"D.U","num_doc_cuidador":"94626774","tipo_doc_jockey":"D.U","num_doc_jockey":"32591406","puesto":"01","orden":"11","diferencia":"","diferencia_acumulada":"1\/2pzo","monto_premio":"29484.00"}
- * @apiSuccess {Object} Carreras Objeto JSON con los campos  'fecha', 'numero', 'nombre', 'reunion',
- 'tipo', 'pista', 'distancia', 'monto_premio', 'edad_desde', 'edad_hasta', 'sexo',
- 'ganadas_desde', 'ganadas_hasta', 'kilos', 'tiempo'
+ * @apiParam  {Date} fecha_inicio Fecha de inicio de la consulta en formato YYYY-mm-dd, inclusive.
+ * @apiParam  {Date} fecha_fin Fecha de fin de la consulta en formato YYYY-mm-dd, inclusive.
  * @apiSuccess {String} id Id de la Carrera
  * @apiSuccess {DateTime} fecha Fecha y hora de la carrera
  * @apiSuccess {Integer} numero Número de la carrera
@@ -252,35 +296,71 @@
  * @apiSuccess {Integer} ganadas_hasta Cantidad máxima de carreras ganadas por el ejemplar para participar en la carrera
  * @apiSuccess {Float} kilos Kilos especificados en el programa
  * @apiSuccess {String} tiempo Tiempo registrado para el ganador de la carrera
+ * @apiSuccessExample {json} /carreras/2016-09-07/2016-09-08
+ *  HTTP/1.1 200 OK 
+ *  [
+ {
+   "id": 16,
+   "fecha": "2016-09-07 14:00:00",
+   "numero": "1",
+   "nombre": "GATITA RYE 2014(ALT)",
+   "reunion": "83",
+   "tipo": "MA",
+   "pista": "RCN",
+   "estado_pista": "P",
+   "distancia": 1100,
+   "monto_premio": "16632.00",
+   "edad_desde": 4,
+   "edad_hasta": 5,
+   "sexo": "T",
+   "ganadas_desde": 1,
+   "ganadas_hasta": 1,
+   "kilos": "57.00",
+   "tiempo": "105371"
+ },
+ {
+   "id": 17,
+   "fecha": "2016-09-08 14:25:00",
+   "numero": "2",
+   "nombre": "SULTAN BID (ALT)",
+   "reunion": "83",
+   "tipo": "MA",
+   "pista": "RCN",
+   "estado_pista": "P",
+   "distancia": 1100,
+   "monto_premio": "15120.00",
+   "edad_desde": 4,
+   "edad_hasta": 4,
+   "sexo": "H",
+   "ganadas_desde": 0,
+   "ganadas_hasta": 0,
+   "kilos": "57.00",
+   "tiempo": "106611"
+ }
+ ]
+
  * @apiError (Error 404) {json} FechaEnFormatoIncorrecto Alguno de los parámetros <code>fecha_inicio</code> o <code>fecha_fin</code>
- * no siguen el formato YYYY-MM-DD.
+ * no sigue el formato YYYY-mm-dd.
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Bad Request
  *     {
- *       "error": "FechaEnFormatoIncorrecto"
+ *       "message": "FechaEnFormatoIncorrecto"
  *     }
  * @apiError (Error 404) {json} FechaInvalida Alguno de los parámetros <code>fecha_inicio</code> o <code>fecha_fin</code>
- * no siguen el formato YYYY-MM-DD.
+ * no sigue el formato YYYY-MM-DD.
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Bad Request
  *     {
- *       "error": "FechaInvalida"
+ *       "message": "FechaInvalida"
  *     }
  */
 
 /**
  * @api {GET} /carreras/ Listar Carreras habilitadas
- * @apiDescription Retorna una lista de las carreras programadas que pueden recibir anotaciones de ejemplares,
+ * @apiDescription Retorna un arreglo de objetos JSON de las carreras programadas que pueden recibir anotaciones de ejemplares,
  * en caso de no existir carreras programadas, se retorna un objeto JSON vacío.
  * @apiName GetCarrerasListar
  * @apiGroup Carreras
- * @apiParamExample {Null} /carreras/
- * { "id": 1, "fecha": "2016-09-13 10:00:00", "numero": "1", "nombre": "GRAN MURALLA I", "reunion": "28", "tipo": "M",
-"pista": "CDI", "distancia": 1200, "monto_premio": "23760.00", "edad_desde": 3, "edad_hasta": 3, "sexo": "H",
-"ganadas_desde": 0, "ganadas_hasta": 0, "kilos": "56.00", "tiempo": "04:54:568" },
- {"id": 2, "fecha": "2016-09-13 10:00:00", "numero": "2", "nombre": "AL VINO VINO 1994", "reunion": "28", "tipo": "M",
- "pista": "RCN", "distancia": 1200, "monto_premio": "19152.00", "edad_desde": 5, "edad_hasta": 6, "sexo": "H",
- "ganadas_desde": 1, "ganadas_hasta": 5, "kilos": "57.00", "tiempo": "05:21:118"  }
  * @apiSuccess {String} id Id de la Carrera
  * @apiSuccess {DateTime} fecha Fecha y hora de la carrera
  * @apiSuccess {Integer} numero Número de la carrera
@@ -297,6 +377,48 @@
  * @apiSuccess {Integer} ganadas_hasta Cantidad máxima de carreras ganadas por el ejemplar para participar en la carrera
  * @apiSuccess {Float} kilos Kilos especificados en el programa
  * @apiSuccess {String} tiempo Tiempo registrado para el ganador de la carrera
+ * @apiSuccessExample {json} /carreras/
+ *  HTTP/1.1 200 OK
+ [
+     {
+       "id": 16,
+       "fecha": "2016-09-07 14:00:00",
+       "numero": "1",
+       "nombre": "GATITA RYE 2014(ALT)",
+       "reunion": "83",
+       "tipo": "MA",
+       "pista": "RCN",
+       "estado_pista": "P",
+       "distancia": 1100,
+       "monto_premio": "16632.00",
+       "edad_desde": 4,
+       "edad_hasta": 5,
+       "sexo": "T",
+       "ganadas_desde": 1,
+       "ganadas_hasta": 1,
+       "kilos": "57.00",
+       "tiempo": "105371"
+     },
+     {
+       "id": 17,
+       "fecha": "2016-09-08 14:25:00",
+       "numero": "2",
+       "nombre": "SULTAN BID (ALT)",
+       "reunion": "83",
+       "tipo": "MA",
+       "pista": "RCN",
+       "estado_pista": "P",
+       "distancia": 1100,
+       "monto_premio": "15120.00",
+       "edad_desde": 4,
+       "edad_hasta": 4,
+       "sexo": "H",
+       "ganadas_desde": 0,
+       "ganadas_hasta": 0,
+       "kilos": "57.00",
+       "tiempo": "106611"
+     }
+ ]
  */
 
 // ********** F I N   C A R R E R A S **********//

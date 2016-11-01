@@ -12,12 +12,13 @@ class RaceController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+     * Devuelve un listado de las carreras habilitadas para recibir anotaciones.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        //TODO: Buscar las carreras habilitadas, no las de hoy y mañana
         $data = array();
         $carreras = Race::where('fecha', '>=', Carbon::today())
             ->where('fecha', '<=', Carbon::tomorrow())
@@ -30,7 +31,7 @@ class RaceController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Devuelve el detalle de una carrera por ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

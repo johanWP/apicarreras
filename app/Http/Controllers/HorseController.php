@@ -34,14 +34,16 @@ class HorseController extends Controller
                 ->performedOn($caballo)
                 ->withProperties(['IP_add' => request()->ip()])
                 ->log('Acceso a ejemplar por tomo'. $tomo .' y folio: '. $folio . ', Nombre: '. $caballo->nombre);
-
+            $fecha_nacimiento = ($caballo->fecha_nacimiento==null) ? 'N/A' : $caballo->fecha_nacimiento->toDateString();
+            $fecha_muerte = ($caballo->fecha_muerte==null) ? 'N/A' : $caballo->fecha_muerte->toDateString();
             $data = [
                 'id'    =>  $caballo->id,
                 'tomo'  =>  $caballo->tomo,
                 'folio' =>  $caballo->folio,
                 'nombre'=>  $caballo->nombre,
-                'fecha_nacimiento'  => $caballo->fecha_nacimiento,
-                'fecha_muerte'      => $caballo->fecha_muerte,
+                'sexo'=>  $caballo->sexo,
+                'fecha_nacimiento'  => $fecha_nacimiento,
+                'fecha_muerte'      => $fecha_muerte,
                 'ganadas_comunes'   => $caballo->ganadas_comunes,
                 'ganadas_clasicos'  => $caballo->ganadas_clasicos,
                 'ganadas_grupo'     => $caballo->ganadas_grupo,
@@ -49,13 +51,14 @@ class HorseController extends Controller
                 'ganadas_series'    => $caballo->ganadas_series
             ];
 
+//            return $caballo->fecha_nacimiento->toDateString();
             return $data;
         }
     }
 
     public function porNombre($nombre)
     {
-        $data = array();
+        $data = array(); $fecha_nacimiento = ''; $fecha_muerte = '';
         $caballos = Horse::where('nombre', 'like', '%' . $nombre . '%')->get();
 
         if ( $caballos->count() < 1 )
@@ -75,13 +78,17 @@ class HorseController extends Controller
 
             foreach ($caballos as $caballo)
             {
+                $fecha_nacimiento = ($caballo->fecha_nacimiento==null) ? 'N/A' : $caballo->fecha_nacimiento->toDateString();
+                $fecha_muerte = ($caballo->fecha_muerte==null) ? 'N/A' : $caballo->fecha_muerte->toDateString();
+
                 $data[] = [
                     'id'    =>  $caballo->id,
                     'tomo'  =>  $caballo->tomo,
                     'folio' =>  $caballo->folio,
                     'nombre'=>  $caballo->nombre,
-                    'fecha_nacimiento'  => $caballo->fecha_nacimiento,
-                    'fecha_muerte'      => $caballo->fecha_muerte,
+                    'sexo'=>  $caballo->sexo,
+                    'fecha_nacimiento'  => $fecha_nacimiento,
+                    'fecha_muerte'      => $fecha_muerte,
                     'ganadas_comunes'   => $caballo->ganadas_comunes,
                     'ganadas_clasicos'  => $caballo->ganadas_clasicos,
                     'ganadas_grupo'     => $caballo->ganadas_grupo,
