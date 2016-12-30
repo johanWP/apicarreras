@@ -19,7 +19,7 @@ class CreateHorsesTable extends Migration
             $table->string('folio', 6);
             $table->string('sexo', 2);
             $table->string('nombre', 100)->index();
-            $table->date('fecha_nacimiento');
+            $table->date('fecha_nacimiento')->nullable();
             $table->date('fecha_muerte')->nullable();
             $table->integer('ganadas_comunes')->default(0);
             $table->integer('ganadas_clasicos')->default(0);

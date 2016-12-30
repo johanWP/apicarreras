@@ -157,6 +157,7 @@
  *       "message": "EjemplarNoExiste"
  *     }
  */
+
 /**
  * @api {GET} /ejemplares/PorNombre/:nombre Consulta por nombre
  * @apiDescription Retorna el un arreglo de objetos con el detalle de los ejemplares que tienen un nombre

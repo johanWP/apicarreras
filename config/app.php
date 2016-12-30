@@ -179,6 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Spatie\Activitylog\ActivitylogServiceProvider::class,
+
+        Laravel\Passport\PassportServiceProvider::class
     ],
 
     /*

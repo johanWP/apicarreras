@@ -16,10 +16,16 @@ class HorseController extends Controller
         //$this->middleware('apiCarreras');
     }
 
+    /**
+     * Devuelve el detalle del ejemplar
+     * @param Integer $tomo Identificación del ejemplar
+     * @param Integer $folio Identificación del ejemplar
+     * @return array|\Illuminate\Http\JsonResponse Arreglo con datos del ejemplar o Error 404 si no existe
+     */
     public function porTomoFolio($tomo, $folio)
     {
         $caballo = Horse::where('tomo', $tomo)->where('folio', $folio)->first();
-        if ( ! $caballo)
+        if (! $caballo)
         {
             activity()
                 ->withProperties(['IP_add' => request()->ip()])
@@ -41,7 +47,7 @@ class HorseController extends Controller
                 'tomo'  =>  $caballo->tomo,
                 'folio' =>  $caballo->folio,
                 'nombre'=>  $caballo->nombre,
-                'sexo'=>  $caballo->sexo,
+                'sexo'  =>  $caballo->sexo,
                 'fecha_nacimiento'  => $fecha_nacimiento,
                 'fecha_muerte'      => $fecha_muerte,
                 'ganadas_comunes'   => $caballo->ganadas_comunes,
@@ -56,6 +62,11 @@ class HorseController extends Controller
         }
     }
 
+    /**
+     * Devuelve un arreglo con los ejemplares cuyo nombre coincida con el término de búsqueda
+     * @param String $nombre Nombre o parte del nombre del ejemplar
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function porNombre($nombre)
     {
         $data = array(); $fecha_nacimiento = ''; $fecha_muerte = '';

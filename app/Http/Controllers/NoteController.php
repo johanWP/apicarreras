@@ -10,6 +10,12 @@ use App\Http\Requests;
 
 class NoteController extends Controller
 {
+    /**
+     * Devuelve un arreglo (que se convierte en JSON) de los ejemplares ratificados para una carrera
+     * En caso de que la carrera no exista, se devuelve un error 404
+     * @param Integer $idCarrera
+     * @return array|JsonResponse
+     */
     public function ratificaciones($idCarrera)
     {
         $carrera = Race::find($idCarrera);
@@ -18,25 +24,35 @@ class NoteController extends Controller
             return response()->json([
                 'message' => 'CarreraNoExiste',
             ], 404);
-        } else
+        } elseif ( empty($carrera->numero) )
         {
-            $anotaciones = Note::where('race_id', $idCarrera)->get();// dd($anotaciones->get());
-            return $this->BuscarRegistros($anotaciones);
+            return response()->json([
+                'message' => 'CarreraNoEstaConfirmada',
+            ], 404);
+        } else {
+            $anotaciones = Note::where('race_id', $idCarrera)->get();
+            return $this->FormatearRegistros($anotaciones);
         }
     }
 
 
-    private function BuscarRegistros($anotaciones)
+    /**
+     * Da formato a la respuesta, hace que si se cambia o agrega un campo a la tabla Races,
+     * este campo no cambie la respuesta JSON a menos que se declare aquí explícitamente.
+     * @param $anotaciones
+     * @return array
+     */
+    private function FormatearRegistros($anotaciones)
     {
         $data = array();
         foreach ($anotaciones as $anotacion)
         {
             $data[] = [
                 'id'          => $anotacion->id,
-                'fecha_carrera'          => $anotacion->fecha,
+                'fecha_carrera'         => $anotacion->fecha,
                 'tipo_doc_caballeriza'  => $anotacion->tipo_doc_caballeriza,
                 'num_doc_caballeriza'   => $anotacion->num_doc_caballeriza,
-                'nombre_caballeriza'   => $anotacion->nombre_caballeriza,
+                'nombre_caballeriza'    => $anotacion->nombre_caballeriza,
                 'carrera_id'            => $anotacion->race_id,
                 'kg_programa'           => $anotacion->kg_programa,
                 'kg_reales'             => $anotacion->kg_reales,

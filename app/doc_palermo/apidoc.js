@@ -97,3 +97,62 @@
  *       "error": "CarreraNoExiste"
  *     }
  */
+
+/**
+ * @api {GET} /ejemplares/PorNombre/:nombre Consulta por nombre
+ * @apiDescription Retorna el un arreglo de objetos con el detalle de los ejemplares que tienen un nombre
+ * coincidente con el parámetro enviado, si no existe ninguno se devuelve un error HTTP 404.
+ * @apiName GetEjemplarPorNombre
+ * @apiGroup Ejemplares
+ * @apiParam  /ejemplares/PorNombre/negr nombre Nombre o parte del nombre del ejemplar
+ * @apiSuccess {Integer} id Id del ejemplar
+ * @apiSuccess {String} tomo Tomo que identifica al ejemplar
+ * @apiSuccess {String} folio Folio que identifica al ejemplar
+ * @apiSuccess {String} nombre Nombre del ejemplar
+ * @apiSuccess {String} sexo Nombre del ejemplar (H, M)
+ * @apiSuccess {Date} fecha_nacimiento Fecha de nacimiento del ejemplar
+ * @apiSuccess {Date} fecha_muerte Fecha de muerte del ejemplar
+ * @apiSuccess {Integer} ganadas_comunes Cantidad de carreras comunes ganadas
+ * @apiSuccess {Integer} ganadas_clasicos Cantidad de clásicos ganadas
+ * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
+ * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
+ * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
+ * @apiSuccessExample {json} /ejemplares/PorNombre/negr
+ *     HTTP/1.1 200 OK
+ [
+ {
+   "id": 10029,
+   "tomo": "1041",
+   "folio": "369",
+   "nombre": "NEGRA ALEGRE",
+   "sexo": "H",
+   "fecha_nacimiento": "1995-11-19",
+   "fecha_muerte": "N/A",
+   "ganadas_comunes": 0,
+   "ganadas_clasicos": 0,
+   "ganadas_grupo": null,
+   "ganadas_internacionales": 0,
+   "ganadas_series": 0
+ },
+ {
+   "id": 57586,
+   "tomo": "803",
+   "folio": "80",
+   "nombre": "NEGRA ALTIVA",
+   "sexo": "H",
+   "fecha_nacimiento": "1986-10-17",
+   "fecha_muerte": "N/A",
+   "ganadas_comunes": 0,
+   "ganadas_clasicos": 0,
+   "ganadas_grupo": null,
+   "ganadas_internacionales": 0,
+   "ganadas_series": 0
+ }
+ ]
+ * @apiError (Error 404) {json} EjemplarNoExiste No hay ejemplares con ese nombre en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "EjemplarNoExiste"
+ *     }
+ */

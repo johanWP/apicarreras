@@ -18,7 +18,6 @@ class CreateTableNotes extends Migration
             $table->integer('race_id')->unsigned();
             $table->string('numero_carrera', 3)->nullable();
             $table->string('nombre_premio', 100)->nullable();
-            $table->string('numero_anotacion', 50)->nullable();
             $table->char('tomo', 6)->nullable();
             $table->char('folio', 6)->nullable();
             $table->string('nombre', 100)->nullable();

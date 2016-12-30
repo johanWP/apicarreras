@@ -12,21 +12,20 @@ class RaceController extends Controller
 {
 
     /**
-     * Devuelve un listado de las carreras habilitadas para recibir anotaciones.
+     * Devuelve un listado de las carreras ratificadas y que ya se corrieron.
+     *
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //TODO: Buscar las carreras habilitadas, no las de hoy y mañana
         $data = array();
-        $carreras = Race::where('fecha', '>=', Carbon::today())
-            ->where('fecha', '<=', Carbon::tomorrow())
-            ->get();
+        $carreras = Race::all();
+
         activity()
             ->withProperties(['IP_add' => request()->ip()])
             ->log('Acceso a Index de carreras');
-        $data = $this->armarArreglo($carreras);
+        $data = $this->FormatearRegistros($carreras);
         return $data;
     }
 
@@ -77,6 +76,13 @@ class RaceController extends Controller
         }
     }
 
+    /**
+     * Devuelve un arreglo con las carreras pasadas o futuras de acuerdo a un rango de fechas
+     * o un error 400 si las fechas tienen formato incorrecto
+     * @param Date $inicio en formato YYYY-MM-DD
+     * @param Date $fin en formato YYYY-MM-DD
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function porFecha($inicio, $fin)
     {
         $data = array();
@@ -108,11 +114,16 @@ class RaceController extends Controller
         activity()
             ->withProperties(['IP_add' => request()->ip()])
             ->log('Acceso a las carreras entre: '. $inicio . ' y '. $fin);
-        $data = $this->armarArreglo($carreras);
+        $data = $this->FormatearRegistros($carreras);
         return $data;
     }
 
-    private function armarArreglo($carreras)
+    /**
+     * Arma un arreglo con los campos acordados para la respuesta JSON
+     * @param Collection $carreras
+     * @return array
+     */
+    private function FormatearRegistros($carreras)
     {
         $data = array();
         foreach ($carreras as $carrera)
