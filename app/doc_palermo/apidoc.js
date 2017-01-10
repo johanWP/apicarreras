@@ -156,3 +156,48 @@
  *       "message": "EjemplarNoExiste"
  *     }
  */
+
+/**
+ * @api {GET} /ejemplares/porTomoFolio/:tomo/:folio Consulta por Tomo y Folio
+ * @apiDescription Retorna el detalle de un ejemplar identificado por tomo y folio,
+ * si no existe el ejemplar se retorna un error HTTP 404.
+ * @apiName GetEjemplarPorTomo
+ * @apiGroup Ejemplares
+ * @apiParam  {String} tomo Tomo que identifica al ejemplar
+ * @apiParam  {String} folio Folio que identifica al ejemplar
+ * @apiSuccess {Integer} id Id del ejemplar
+ * @apiSuccess {String} tomo Tomo que identifica al ejemplar
+ * @apiSuccess {String} folio Folio que identifica al ejemplar
+ * @apiSuccess {String} nombre Nombre del ejemplar
+ * @apiSuccess {String} sexo Sexo del ejemplar (H, M)
+ * @apiSuccess {Date} fecha_nacimiento Fecha de nacimiento del ejemplar
+ * @apiSuccess {Date} fecha_muerte Fecha de muerte del ejemplar
+ * @apiSuccess {Integer} ganadas_comunes Cantidad de carreras comunes ganadas
+ * @apiSuccess {Integer} ganadas_clasicos Cantidad de clásicos ganadas
+ * @apiSuccess {Integer} ganadas_grupo Cantidad de carreras de grupo ganadas
+ * @apiSuccess {Integer} ganadas_internacionales Cantidad de carreras internacionales ganadas
+ * @apiSuccess {Integer} ganadas_series Cantidad de carreras de series ganadas
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ {
+   "id": 10029,
+   "tomo": "1041",
+   "folio": "369",
+   "nombre": "NEGRA ALEGRE",
+   "sexo": "H",
+   "fecha_nacimiento": "1995-11-19",
+   "fecha_muerte": "N/A",
+   "ganadas_comunes": 0,
+   "ganadas_clasicos": 0,
+   "ganadas_grupo": null,
+   "ganadas_internacionales": 0,
+   "ganadas_series": 0
+ }
+ * @apiError (Error 404) {json} EjemplarNoExiste La combinación de <code>tomo</code> y <code>folio</code> del ejemplar no existe
+ * en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "EjemplarNoExiste"
+ *     }
+ */

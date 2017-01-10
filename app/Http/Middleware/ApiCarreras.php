@@ -18,7 +18,7 @@ class ApiCarreras
     public function handle($request, Closure $next)
     {
         $modificador = 22.01;
-        $hashed = (string) ((date("Y").date("m").date("d"))*$modificador);
+        $hashed = (string) ((date("Y").date("m").date("d"))*$modificador); //dd($hashed);
         if($request->token == md5($hashed))
         {
             return $next($request);
