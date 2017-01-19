@@ -89,7 +89,7 @@
  */
 
 /**
- * @api {GET} /caballerizas/:id Detalle de caballeriza
+ * @api {GET} /caballerizas/:id Consulta por Id
  * @apiDescription Retorna el detalle de una caballeriza identificada por el campo Id,
  * si no existe la caballeriza se retorna un error HTTP 404.
  * @apiName GetCaballerizas
@@ -109,6 +109,29 @@
  *     }
  */
 
+/**
+ * @api {GET} /caballerizas/porNombre/:nombre Consulta por nombre
+ * @apiDescription Retorna el detalle de una o varias caballeriza con nombre parcial o 
+ * totalmente coincidente con el parámetro, si no existe ninguna se retorna error 404.
+ * @apiName GetCaballerizasPorNombre
+ * @apiGroup Caballerizas
+ * @apiParam  {String} nombre Nombre o parte del nombre de la caballeriza
+ * @apiParamExample {Object} /caballerizas/porNombre/roca
+ * { "id": 14318, "tipo_doc": "D.U", "num_doc": "10958925", "nombre": "11LAROCA (V*T*)" },
+ * { "id": 22036, "tipo_doc": "MAQ", "num_doc": "2139", "nombre": "AGUSTIN ROCA" },
+ * { "id": 22036, "tipo_doc": "MAQ", "num_doc": "58467", "nombre": "ROCA DE SANTA FE (SFE)" }
+ * @apiSuccess {String} id Id de la Caballeriza
+ * @apiSuccess {String} tipo_doc Tipo de documento ['D.U', 'MAQ', 'C.I']
+ * @apiSuccess {String} num_doc Número de documento
+ * @apiSuccess {String} nombre Nombre de la caballeriza
+ * @apiError (Error 404) {json} EjemplarNoExiste No hay ejemplares con ese nombre en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "CaballerizaNoExiste"
+ *     }
+
+ */
 // ********** F I N   C A B A L L E R I Z A S **********//
 
 
@@ -223,7 +246,7 @@
 // ********** C A R R E R A S **********//
 
 /**
- * @api {GET} /carreras/porID/:idCarrera Consulta por Id
+ * @api {GET} /carreras/:idCarrera Consulta por Id
  * @apiDescription Retorna el detalle de una carerra específica, en caso de no existir el id de la carrera, se retorna un error HTTP 404.
  * @apiName GetCarreras
  * @apiGroup Carreras
