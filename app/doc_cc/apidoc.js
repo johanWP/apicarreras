@@ -450,10 +450,50 @@
 
 // ********** P R O F E S I O N A L E S **********//
 /**
- * @api {GET} /profesionales/:tipo_documento/:numero_documento Listar detalles de un profesional
+ * @api {GET} /profesionales/ Listar Profesionales registrados
+ * @apiDescription Retorna detalles de todos los profesionales en la base de datos
+ * (Propietario, Cuidador, Jockey, Peon o Sereno),
+ * en caso de no existir, se retorna el código HTTP 404.
+ * @apiName GetProfesionalListar
+ * @apiGroup Profesionales
+ * @apiParamExample {String} /profesionales/
+ * {"id":1,"tipo_doc":"MAQ","num_doc":"30362","nombre":"A. DE CABRERA MARIA SARA","email":"","
+ * categoria":"","patente1":"","patente2":"","propietario":1,"cuidador":0,"jockey":0,"cuidador_jockey":0,
+ * "capataz":0,"peon":0,"sereno":0},
+ {"id":10,"tipo_doc":"C.I","num_doc":"2199110","nombre":"ABADI JACOBO","email":"","
+ categoria":"","patente1":"","patente2":"","propietario":1,"cuidador":0,"jockey":0,"cuidador_jockey":0,
+ "capataz":0,"peon":0,"sereno":0}
+ * @apiSuccess {Integer} id Id del profesional
+ * @apiSuccess {String} tipo_doc Tipo de Documento ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
+ * @apiSuccess {String} num_doc Número de Documento
+ * @apiSuccess {String} nombre Nombre del profesional
+ * @apiSuccess {String} email Correo electrónico del profesional
+ * @apiSuccess {Boolean} propietario Define si el profesional es un propietario o no.
+ * @apiSuccess {Boolean} cuidador Define si el profesional es un cuidador o no.
+ * @apiSuccess {Boolean} jockey Define si el profesional es un jockey o no.
+ * @apiSuccess {Boolean} cuidador_jockey Define si el profesional es cuidador y jockey o no.
+ * @apiSuccess {Boolean} capataz Define si el profesional es un capataz o no.
+ * @apiSuccess {Boolean} peon Define si el profesional es un peon o no.
+ * @apiSuccess {Boolean} sereno Define si el profesional es un sereno o no.
+ * @apiSuccess {String} categoria Categoria del profesional ['2', '3', '4', 'A', 'E', 'J', 'P', 'X']
+ * @apiSuccess {String} patente1 Tipo de patente que posee el profesional
+ * ['LP', 'CTE', 'AR', 'AZL', 'RS',	'RFL', 'CBA', 'M*',	'BV', 'VM', 'CCA', 'CDU', 'SR', 'VT*', 'SFE',
+ * 'GGY', 'VGY', 'SJN', 'MAD', 'TUC', 'R4', 'MDP'', 'CHI', 'PS', 'BCH, 'TDL', 'PNA', 'GCH', 'CR', 'SI',
+ * 'MZA', 'AZ', 'RDJ', 'SP', 'SFO', 'PDL', 'ST', 'VME', 'PER', 'VIC', 'NEU', 'GB', 'SDE', 'SL', 'USA',
+ * 'LPT', 'MRS', 'NQN', 'R*', 'STA', '408',	'DOL', 'RN', 'VDM']
+ * @apiSuccess {String} patente2 Tipo de patente que posee el profesional ['CAD', 'ÑÑÑ', 'AR', 'RS', 'CBA', 'LP', 'CDU', 'SFE', 'SJN', 'CDA',
+ * 'PER', 'SI', 'BV', 'AZL', 'TUC', 'VT*',	'GCH',	'SR',	'M*',	'LPT',	'PAN',	'MZA',	'CHI',
+ * 'VM', 'RDJ',	'USA', 'PS', 'TDL', 'CCA', 'VGY', 'GGY', 'PNA', 'SFO', 'R4', 'SL',
+ * 'VME', 'RFL', '338', 'R*', 'DOL', 'SP', 'VDM', 'PDL', 'MDP', 'NQN', 'MRS' ]
+ */
+
+
+
+/**
+ * @api {GET} /profesionales/porDoc/:tipo_documento/:numero_documento Consulta por tipo y número de documento
  * @apiDescription Retorna el detalle de un profesional (Propietario, Cuidador, Jockey, Peon o Sereno),
  * en caso de no existir, se retorna el código HTTP 404.
- * @apiName GetProfesional
+ * @apiName GetProfesionalPorDoc
  * @apiGroup Profesionales
  * @apiParam {String} tipo_documento Tipo de Documento ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
  * @apiParam {String} numero_documento Número de documento del profesional
@@ -483,12 +523,58 @@
  * 'PER', 'SI', 'BV', 'AZL', 'TUC', 'VT*',	'GCH',	'SR',	'M*',	'LPT',	'PAN',	'MZA',	'CHI',
  * 'VM', 'RDJ',	'USA', 'PS', 'TDL', 'CCA', 'VGY', 'GGY', 'PNA', 'SFO', 'R4', 'SL',
  * 'VME', 'RFL', '338', 'R*', 'DOL', 'SP', 'VDM', 'PDL', 'MDP', 'NQN', 'MRS' ]
- * @apiError (Error 404) {json} UsuarioNoExiste la combinación de <code>tipo_documento</code> y <code>num_documento</code>
+ * @apiError (Error 404) {json} ProfesionalNoExiste la combinación de <code>tipo_documento</code> y <code>num_documento</code>
  * no existe en la base de datos.
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
- *       "error": "UsuarioNoExiste"
+ *       "error": "ProfesionalNoExiste"
+ *     }
+ */
+
+/**
+ * @api {GET} /profesionales/porNombre/:nombre Consulta por Nombre
+ * @apiDescription Retorna detalles de los profesionales con nombre coincidente
+ * al parámetro de búsqueda (Propietario, Cuidador, Jockey, Peon o Sereno),
+ * en caso de no existir, se retorna el código HTTP 404.
+ * @apiName GetProfesionalPorNombre
+ * @apiGroup Profesionales
+ * @apiParam {String} nombre Nombre o parte del nombre
+ * @apiParamExample {String} /profesionales/porNombre/johan
+ *  {"id":25598,"tipo_doc":"MAQ","num_doc":"60465","nombre":"YOSVIAK MARIA JOHANNA","email":"",
+ *  "categoria":"","patente1":"","patente2":"","propietario":1,"cuidador":0,"jockey":0,"cuidador_jockey":0,"
+ *  capataz":0,"peon":0,"sereno":0},
+ *  {"id":31693,"tipo_doc":"D.U","num_doc":"33558777","nombre":"MARTORELLA JOHANA","email":"",
+ *  "categoria":"","patente1":"","patente2":"","propietario":1,"cuidador":0,"jockey":0,"cuidador_jockey":0,
+ *  "capataz":0,"peon":0,"sereno":0}
+ * @apiSuccess {Integer} id Id del profesional
+ * @apiSuccess {String} tipo_doc Tipo de Documento ['C.I', 'D.U', 'L.C', 'L.E', 'MAQ', 'PAS']
+ * @apiSuccess {String} num_doc Número de Documento
+ * @apiSuccess {String} nombre Nombre del profesional
+ * @apiSuccess {String} email Correo electrónico del profesional
+ * @apiSuccess {Boolean} propietario Define si el profesional es un propietario o no.
+ * @apiSuccess {Boolean} cuidador Define si el profesional es un cuidador o no.
+ * @apiSuccess {Boolean} jockey Define si el profesional es un jockey o no.
+ * @apiSuccess {Boolean} cuidador_jockey Define si el profesional es cuidador y jockey o no.
+ * @apiSuccess {Boolean} capataz Define si el profesional es un capataz o no.
+ * @apiSuccess {Boolean} peon Define si el profesional es un peon o no.
+ * @apiSuccess {Boolean} sereno Define si el profesional es un sereno o no.
+ * @apiSuccess {String} categoria Categoria del profesional ['2', '3', '4', 'A', 'E', 'J', 'P', 'X']
+ * @apiSuccess {String} patente1 Tipo de patente que posee el profesional
+ * ['LP', 'CTE', 'AR', 'AZL', 'RS',	'RFL', 'CBA', 'M*',	'BV', 'VM', 'CCA', 'CDU', 'SR', 'VT*', 'SFE',
+ * 'GGY', 'VGY', 'SJN', 'MAD', 'TUC', 'R4', 'MDP'', 'CHI', 'PS', 'BCH, 'TDL', 'PNA', 'GCH', 'CR', 'SI',
+ * 'MZA', 'AZ', 'RDJ', 'SP', 'SFO', 'PDL', 'ST', 'VME', 'PER', 'VIC', 'NEU', 'GB', 'SDE', 'SL', 'USA',
+ * 'LPT', 'MRS', 'NQN', 'R*', 'STA', '408',	'DOL', 'RN', 'VDM']
+ * @apiSuccess {String} patente2 Tipo de patente que posee el profesional ['CAD', 'ÑÑÑ', 'AR', 'RS', 'CBA', 'LP', 'CDU', 'SFE', 'SJN', 'CDA',
+ * 'PER', 'SI', 'BV', 'AZL', 'TUC', 'VT*',	'GCH',	'SR',	'M*',	'LPT',	'PAN',	'MZA',	'CHI',
+ * 'VM', 'RDJ',	'USA', 'PS', 'TDL', 'CCA', 'VGY', 'GGY', 'PNA', 'SFO', 'R4', 'SL',
+ * 'VME', 'RFL', '338', 'R*', 'DOL', 'SP', 'VDM', 'PDL', 'MDP', 'NQN', 'MRS' ]
+ * @apiError (Error 404) {json} ProfesionalNoExiste la combinación de <code>tipo_documento</code> y <code>num_documento</code>
+ * no existe en la base de datos.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "ProfesionalNoExiste"
  *     }
  */
 // ********** F I N   P R O F E S I O N A L E S **********//

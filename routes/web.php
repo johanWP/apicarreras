@@ -31,6 +31,12 @@ Route::get('/carreras/', 'RaceController@index');
 Route::get('/carreras/porFecha/{inicio}/{fin}', 'RaceController@porFecha');
 Route::get('/carreras/{id}', 'RaceController@porId');
 
-// ********** WS de Ratificaciones para Palermo *************
+// ********** WS de Ratificaciones para todos *************
 Route::get('/ratificaciones/porCarrera/{idCarrera}', 'NoteController@ratificaciones');
+
+// ********** WS de Profesionales para todos *************
+Route::get('/profesionales', 'ProfessionalController@index');
+Route::get('/profesionales/{professional}', 'ProfessionalController@show');
+Route::get('/profesionales/porDoc/{tipo_doc}/{num_doc}', 'ProfessionalController@porDoc');
+Route::get('/profesionales/porNombre/{nombre}', 'ProfessionalController@porNombre');
  
