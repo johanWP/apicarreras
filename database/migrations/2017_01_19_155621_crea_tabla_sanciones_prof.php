@@ -20,10 +20,10 @@ class CreaTablaSancionesProf extends Migration
             $table->integer('professional_id')->unsigned();
             $table->date('fecha_desde');
             $table->date('fecha_hasta');
-            $table->date('fecha_carrera');
-            $table->date('fecha_sancion');
-            $table->char('habilitado', 5);
-            $table->char('codigo_hopodromo', 6);
+            $table->char('tipo_sancion', 3);
+            $table->char('codigo_hipodromo', 6);
+            $table->date('fecha_carrera')->nullable();
+            $table->integer('numero_carrera')->nullable();
             $table->string('texto_sancion');
             $table->timestamps();
         });

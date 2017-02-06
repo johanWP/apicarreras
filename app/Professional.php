@@ -24,4 +24,44 @@ class Professional extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
+    public function sanciones()
+    {
+        return $this->hasMany('App\SancionesProfessionals');
+    }
+
+    public function getPropietarioAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
+    public function getCuidadorAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
+    public function getJockeyAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
+    public function getPeonAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
+    public function getSerenoAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
+    public function getCapatazAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
+    public function getCuidadorJockeyAttribute($value)
+    {
+        ($value == 'X') ? $value = 1 : $value = 0;
+        return $value;
+    }
 }

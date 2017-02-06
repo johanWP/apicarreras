@@ -19,61 +19,57 @@ class StableController extends Controller
         //$this->middleware('apiCarreras');
     }
     /**
-     * Devuelve una lista de las caballerizas registradas
-     * 
+     * Devuelve una lista de las caballerizas registradas, incluyendo sus sanciones
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $result = New Collection();
-        $caballerizas = Stable::all();
-        foreach ($caballerizas as $caballeriza)
-        {
-            $result[] = [
-                'id'        =>  $caballeriza->id,
-                'tipo_doc'  =>  $caballeriza->tipo_doc,
-                'num_doc'   =>  $caballeriza->num_doc,
-                'nombre'    =>  $caballeriza->nombre,
-            ];
-        }
-        return $result;
+        $caballerizas = Stable::with('sanciones')->get();
+        activity()
+            ->withProperties(['IP_add' => request()->ip()])
+            ->log('Acceso a listado de caballerizas.');
+
+        return $caballerizas;
     }
     
     /**
-     * Devuelve el detalle de una caballeriza por su Id
+     * Devuelve el detalle de una caballeriza por su Id, incluyendo sus sanciones
      * @param id
      * @return collection
      */
     public function show($id)
     {
 
-        $caballeriza = Stable::find($id);
-        if ( ! $caballeriza)
+        $caballeriza = Stable::where('id', $id)->with('sanciones')->get();
+        if ($caballeriza->count() < 1)
         {
+            activity()
+                ->withProperties(['IP_add' => request()->ip()])
+                ->log('Error: Acceso a detalle de caballeriza con id: ' . $id);
+            
             return response()->json([
                 'message' => 'CaballerizaNoExiste',
             ], 404);
         } else
         {
-            return  $result = [
-                'id'        =>  $caballeriza->id,
-                'tipo_doc'  =>  $caballeriza->tipo_doc,
-                'num_doc'   =>  $caballeriza->num_doc,
-                'nombre'    =>  $caballeriza->nombre,
-            ];
+            activity()
+                ->withProperties(['IP_add' => request()->ip()])
+                ->log('Acceso a detalle de caballeriza con id: ' . $id);
+
+            return $caballeriza;
         }
     }
 
     /**
-     * Devuelve un objeto JSON con el resultado de la busqueda por nombre
+     * Devuelve un objeto JSON con el resultado de la busqueda por nombre, incluyendo sus sanciones
      * @param String $nombre
      * @return array|\Illuminate\Http\JsonResponse
      */
     public function porNombre($nombre)
     {
-        $data = array();
-        $caballerizas = Stable::where('nombre', 'like', '%' . $nombre . '%')->get();
+        $caballerizas = Stable::where('nombre', 'like', '%' . $nombre . '%')->with('sanciones')->get();
 
-        if ( $caballerizas->count() < 1 )
+        if ($caballerizas->count() < 1)
         {
             activity()
                 ->withProperties(['IP_add' => request()->ip()])
@@ -88,17 +84,7 @@ class StableController extends Controller
                 ->withProperties(['IP_add' => request()->ip()])
                 ->log('Acceso a ejemplares con nombre: '. $nombre);
 
-            foreach ($caballerizas as $caballeriza)
-            {
-
-                $data[] = [
-                    'id'    =>  $caballeriza->id,
-                    'tipo_doc'  =>  $caballeriza->tipo_doc,
-                    'num_doc' =>  $caballeriza->num_doc,
-                    'nombre'=>  $caballeriza->nombre,
-                ];
-            }
-            return $data;
+            return $caballerizas;
         }
     }
 

@@ -8,13 +8,13 @@ use App\Professional;
 class ProfessionalController extends Controller
 {
     /**
-     * Listado de todos los profesionales
-     * @param Professional $professional
-     * @return array
+     * Listado de todos los profesionales con sus sanciones
+     * @return \Illuminate\Http\JsonResponse 
      */
-    public function index(Professional $professional)
+    public function index()
     {
-        $professionals = $this->FormatearRegistro(Professional::all());
+//        $professionals = $this->FormatearRegistro(Professional::all());
+        $professionals = Professional::with('sanciones')->get();
         activity()
             ->withProperties(['IP_add' => request()->ip()])
             ->log('Acceso a listado de profesionales');
@@ -24,27 +24,35 @@ class ProfessionalController extends Controller
 
 
     /**
-     * @param Professional $professional
-     * @return array
+     * @param Integer $id Id del profesional
+     * @return \Illuminate\Http\JsonResponse Arreglo con los datos del profesional incluyendo sus sanciones
      */
-    public function show(Professional $professional)
+    public function porId(Int $id)
     {
-        $data = $this->FormatearRegistro($professional);
+//        $data = $this->FormatearRegistro($professional);
+        activity()
+            ->withProperties(['IP_add' => request()->ip()])
+            ->log('Acceso a profesionales por ID: '. $id);
+
+        $data = Professional::where('id', $id)->with('sanciones')->get();
+
         return $data;
 
     }
 
     /**
-     * Devuelve los detalles de la consulta por numero y tipo de documento
+     * Devuelve los detalles de la consulta por numero y tipo de documento, incluyendo sus sanciones
      * @param String $tipo_doc
      * @param String $num_doc
-     * @return array|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function porDoc($tipo_doc, $num_doc)
     {
         $data = array();
-        $profesionales = Professional::where('tipo_doc', $tipo_doc)->
-            where('num_doc', $num_doc)->get();
+        $profesionales = Professional::where('tipo_doc', $tipo_doc)
+            ->where('num_doc', $num_doc)
+            ->with('sanciones')
+            ->get();
 
         if ( $profesionales->count() < 1 )
         {
@@ -61,20 +69,22 @@ class ProfessionalController extends Controller
                 ->withProperties(['IP_add' => request()->ip()])
                 ->log('Acceso a ejemplares por doc: '. $tipo_doc . '-' . $num_doc);
 
-            $data = $this->FormatearRegistro($profesionales);
-            return $data;
+//            $data = $this->FormatearRegistro($profesionales);
+            return $profesionales;
         }
     }
 
     /**
      * Devuelve un arreglo con los datos de profesionales coincidentes con el parámetro de búsqueda
      * @param String $nombre
-     * @return array|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function porNombre($nombre)
     {
-        $data = array();
-        $profesionales = Professional::where('nombre', 'like', '%' . $nombre . '%')->get();
+//        $data = array();
+        $profesionales = Professional::where('nombre', 'like', '%' . $nombre . '%')
+            ->with('sanciones')
+            ->get();
 
         if ( $profesionales->count() < 1 )
         {
@@ -91,8 +101,9 @@ class ProfessionalController extends Controller
                 ->withProperties(['IP_add' => request()->ip()])
                 ->log('Acceso a ejemplares con nombre: '. $nombre);
 
-            $data = $this->FormatearRegistro($profesionales);
-            return $data;
+//            $data = $this->FormatearRegistro($profesionales);
+
+            return $profesionales;
         }
     }
 
@@ -100,9 +111,9 @@ class ProfessionalController extends Controller
     /**
      * Toma la colection y devuelve unicamente los campos que estan explicitamente indicados
      * @param Collection $professional
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
-    private function FormatearRegistro($professional)
+    private function FormatearRegistro(Collection $professional)
     {
         $data = array();
         foreach ($professional as $prof)

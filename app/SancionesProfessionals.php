@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Stable extends Model
+class SancionesProfessionals extends Model
 {
-    protected $table = 'stables';
+    protected $table = 'sanciones_professionals';
     /**
      * The attributes that are mass assignable.
      *
@@ -25,8 +25,8 @@ class Stable extends Model
         'created_at', 'updated_at', 'deleted_at',
     ];
 
-    public function sanciones()
+    public function professional()
     {
-        return $this->hasMany('App\SancionesStables');
+        return $this->belongsTo('App\Professional');
     }
 }
