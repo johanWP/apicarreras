@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 // ******** WS Caballerizas ****************
 Route::get('/caballerizas/', 'StableController@index');
 Route::get('/caballerizas/porId/{id}', 'StableController@show');
@@ -42,10 +40,12 @@ Route::get('/profesionales/porNombre/{nombre}', 'ProfessionalController@porNombr
 
 
 // ********** WS de Sanciones para todos *************
-Route::get('/sanciones/profesionales/', 'SancionesProfessionalsController@index');
-Route::get('/sanciones/profesionales/porId/{id}', 'SancionesProfessionalsController@porId');
-Route::get('/sanciones/ejemplares/', 'SancionesHorsesController@index');
-Route::get('/sanciones/ejemplares/porId/{id}', 'SancionesHorsesController@porId');
+//Route::get('/sanciones/profesionales/', 'SancionesProfessionalsController@index');
+//Route::get('/sanciones/profesionales/porId/{id}', 'SancionesProfessionalsController@porId');
+
+//Route::get('/sanciones/ejemplares/', 'SancionesHorsesController@index');
+//Route::get('/sanciones/ejemplares/porId/{id}', 'SancionesHorsesController@porId');
+
 Route::get('/sanciones/caballerizas/', 'SancionesStablesController@index');
-Route::get('/sanciones/caballerizas/porId/{id}', 'SancionesStablesController@porId');
+//Route::get('/sanciones/caballerizas/porId/{id}', 'SancionesStablesController@porId');
 
